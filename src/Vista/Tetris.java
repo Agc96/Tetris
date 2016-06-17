@@ -154,48 +154,49 @@ public class Tetris extends JFrame implements KeyListener {
         int[] zero = {-1, -1, -1, -1};
         int[] one = {-1, -1, -1, -1};
         int[] two = {-1, -1, -1, -1};
+        
         for (int d = 0;d<4;d++){
-            if (tetriminos.[rotacionActual][d][tetrRand].x == -2){
+            if (tetriminos.getX(tetrRand, rotacionActual, d) == -2)
                 m2[d] = d;
-            } else if (tetriminos.[rotacionActual][d][tetrRand].x == -1){
+            else if (tetriminos.getX(tetrRand, rotacionActual, d) == -1)
                 m1[d] = d;
-            } else if (tetriminos.[rotacionActual][d][tetrRand].x == 0){
+            else if (tetriminos.getX(tetrRand, rotacionActual, d) == 0)
                 zero[d] = d;
-            } else if (tetriminos.[rotacionActual][d][tetrRand].x == 1){
+            else if (tetriminos.getX(tetrRand, rotacionActual, d) == 1)
                 one[d] = d;
-            } else if (tetriminos.[rotacionActual][d][tetrRand].x == 2){
+            else if (tetriminos.getX(tetrRand, rotacionActual, d) == 2)
                 two[d] = d;
-            }
         }
         int tmpm2 = -5;
         int tmpm1 = -5;
         int tmpzero = -5;
         int tmpone = -5;
         int tmptwo = -5;
-        for (int d = 0;d<4;d++){
+        
+        for (int d = 0;d<4;d++) {
             if (m2[d] != -1){
-                if (tmpm2<tetriminos.[rotacionActual][m2[d]][tetrRand].y){
-                    tmpm2 = tetriminos.[rotacionActual][m2[d]][tetrRand].y;
+                if (tmpm2 < tetriminos.getY(tetrRand, rotacionActual, m2[d])){
+                    tmpm2 = tetriminos.getY(tetrRand, rotacionActual, m2[d]);
                 }
             }
             if (m1[d] != -1){
-                if (tmpm1<tetriminos.[rotacionActual][m1[d]][tetrRand].y){
-                    tmpm1 = tetriminos.[rotacionActual][m1[d]][tetrRand].y;
+                if (tmpm1 < tetriminos.getY(tetrRand, rotacionActual, m1[d])){
+                    tmpm1 = tetriminos.getY(tetrRand, rotacionActual, m1[d]);
                 }
             }
             if (zero[d] != -1){
-                if (tmpzero<tetriminos.[rotacionActual][zero[d]][tetrRand].y){
-                    tmpzero = tetriminos.[rotacionActual][zero[d]][tetrRand].y;
+                if (tmpzero < tetriminos.getY(tetrRand, rotacionActual, zero[d])){
+                    tmpzero = tetriminos.getY(tetrRand, rotacionActual, zero[d]);
                 }
             }
             if (one[d] != -1){
-                if (tmpone<tetriminos.[rotacionActual][one[d]][tetrRand].y){
-                    tmpone = tetriminos.[rotacionActual][one[d]][tetrRand].y;
+                if (tmpone < tetriminos.getY(tetrRand, rotacionActual, one[d])){
+                    tmpone = tetriminos.getY(tetrRand, rotacionActual, one[d]);
                 }
             }
             if (two[d] != -1){
-                if (tmptwo<tetriminos.[rotacionActual][two[d]][tetrRand].y){
-                    tmptwo = tetriminos.[rotacionActual][two[d]][tetrRand].y;
+                if (tmptwo < tetriminos.getY(tetrRand, rotacionActual, two[d])){
+                    tmptwo = tetriminos.getY(tetrRand, rotacionActual, two[d]);
                 }
             }
         }
