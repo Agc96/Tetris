@@ -9,6 +9,7 @@ package Vista;
  *
  * @author David
  */
+import Controlador.MapaVista;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -58,9 +59,9 @@ public class Tetris extends JFrame implements KeyListener {
     public boolean continuaJuego() {
         boolean aux = true;
         for (int i = 0; i < 4; i++)
-            aux &= mapaVista.celdaVacia(4 + tetriminos.getX(tetrRand, rotacionActual, i),
+            aux = aux && mapaVista.celdaVacia(4 + tetriminos.getX(tetrRand, rotacionActual, i),
                 tetriminos.getY(tetrRand, rotacionActual, i));
-        return aux;
+        return aux; 
     }
     
     public void blockgen(){
@@ -78,7 +79,7 @@ public class Tetris extends JFrame implements KeyListener {
             for (int i = 0; i < 4; i++)
                 mapaVista.modificarColor(4 + tetriminos.getX(tetrRand, rotacionActual, i),
                         tetriminos.getY(tetrRand, rotacionActual, i),
-                        tetriminos.ObtenerColor(i));
+                        tetriminos.ObtenerColor(tetrRand));
             this.go();
         }
         else { //Fin del juego
@@ -91,10 +92,10 @@ public class Tetris extends JFrame implements KeyListener {
     public boolean validoRotar() {
         boolean valido = true;
         for (int i = 0; i < 4; i++) {
-            int valor = perimetro.obtenerValorCelda(centralx + 2 +
-                    tetriminos.getX(tetrRand, rotacionActual, i), centraly + 2
-                    + tetriminos.getY(tetrRand, rotacionActual, i));
-            valido &= (valor != 4 && valor != 3 && valor != 2 && valor != 1);
+            int valor = perimetro.obtenerValorCelda(
+                    centralx + 2 + tetriminos.getX(tetrRand, rotacionActual, i),
+                    centraly + 2 + tetriminos.getY(tetrRand, rotacionActual, i));
+            valido = valido && (valor == 0);
         }
         return valido;
     }
@@ -111,14 +112,14 @@ public class Tetris extends JFrame implements KeyListener {
             System.exit(1);
         }
         if (validoRotar()) {
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 4; i++)
                 mapaVista.modificarColor(centralx + tetriminos.getX(tetrRand, rotacionAntigua, i),
                         centraly + tetriminos.getY(tetrRand, rotacionAntigua, i),
                         MapaVista.vacio);
+            for (int i = 0; i < 4; i++)
                 mapaVista.modificarColor(centralx + tetriminos.getX(tetrRand, rotacionActual, i),
                         centraly + tetriminos.getY(tetrRand, rotacionActual, i),
                         tetriminos.ObtenerColor(tetrRand));
-            }            
         } else { //Volver al estado actual
             if (rotacionAntigua > 0){
                 this.rotacionActual = this.rotacionAntigua;
@@ -129,24 +130,6 @@ public class Tetris extends JFrame implements KeyListener {
             }
         }
     }
- 
- 
-    public int getxs(){
-        int xs = 0;
-        int[] xf = {-1, -1, -1, -1};
-        for (int d = 0;d<4;d++){
-            if ((xf[0] != tetriminos.[rotacionActual][d][tetrRand].x) || (xf[1] != tetriminos.[rotacionActual][d][tetrRand].x) || (xf[2] != tetriminos.[rotacionActual][d][tetrRand].x) || (xf[3] != tetriminos.[rotacionActual][d][tetrRand].x)){
-                xf[d] = tetriminos.[rotacionActual][d][tetrRand].x;
-            }
-        }
-        for (int d = 0;d<4;d++){
-            if (xf[d] != -1){
-                xs++;
-            }
-        }
-        return xs;
-    }
- 
  
     public void movedown(){
         int[] m2 = {-1, -1, -1, -1};
@@ -202,35 +185,30 @@ public class Tetris extends JFrame implements KeyListener {
         }
         int total = 0;
         for (int d = 0;d<4;d++){
-            if (tetriminos.[rotacionActual][d][tetrRand].x == -2){
-                if (perimetro[2+centralx+-2][2+centraly+tmpm2+1] != 4){
-                    if(b[centralx+-2][centraly+tmpm2+1].getBackground() == MapaVista.vacio){
+            if (tetriminos.getX(tetrRand, rotacionActual, d) == -2){
+                if (perimetro.obtenerValorCelda(centralx, 3 + centraly + tmpm2) != 4 &&
+                        mapaVista.celdaVacia(centralx - 2, centraly + tmpm2 + 1)){
                         total++;
-                    }
                 }
-            } else if (tetriminos.[rotacionActual][d][tetrRand].x == -1){
-                if (perimetro[2+centralx+-1][2+centraly+tmpm1+1] != 4){
-                    if (b[centralx+-1][centraly+tmpm1+1].getBackground() == MapaVista.vacio){
+            } else if (tetriminos.getX(tetrRand, rotacionActual, d) == -1){
+                if (perimetro.obtenerValorCelda(centralx + 1, 3 + centraly + tmpm1) != 4 &&
+                        mapaVista.celdaVacia(centralx - 1, centraly + tmpm1 + 1)){
                         total++;
-                    }
                 }
-            } else if (tetriminos.[rotacionActual][d][tetrRand].x == 0){
-                if (perimetro[2+centralx][2+centraly+tmpzero+1] != 4){
-                    if (b[centralx][centraly+tmpzero+1].getBackground() == MapaVista.vacio){
+            } else if (tetriminos.getX(tetrRand, rotacionActual, d) == 0){
+                if (perimetro.obtenerValorCelda(centralx + 2, 3 + centraly + tmpzero) != 4 &&
+                        mapaVista.celdaVacia(centralx, centraly + tmpzero + 1)){
                         total++;
-                    }
                 }
-            } else if (tetriminos.[rotacionActual][d][tetrRand].x == 1){
-                if (perimetro[2+centralx+1][2+centraly+tmpone+1] != 4){
-                    if (b[centralx+1][centraly+tmpone+1].getBackground() == MapaVista.vacio){
+            } else if (tetriminos.getX(tetrRand, rotacionActual, d) == 1){
+                if (perimetro.obtenerValorCelda(centralx + 3, 3 + centraly + tmpone) != 4 &&
+                        mapaVista.celdaVacia(centralx + 1, centraly + tmpone + 1)){
                         total++;
-                    }
                 }
-            } else if (tetriminos.[rotacionActual][d][tetrRand].x == 2){
-                if (perimetro[2+centralx+2][2+centraly+tmptwo+1] != 4){
-                    if (b[centralx+2][centraly+tmptwo+1].getBackground() == MapaVista.vacio){
+            } else if (tetriminos.getX(tetrRand, rotacionActual, d) == 2){
+                if (perimetro.obtenerValorCelda(centralx + 4, 3 + centraly + tmptwo) != 4 &&
+                        mapaVista.celdaVacia(centralx + 2, centraly + tmptwo + 1)){
                         total++;
-                    }
                 }
             }
         }
@@ -241,13 +219,10 @@ public class Tetris extends JFrame implements KeyListener {
                         MapaVista.vacio);
             centraly++;
             for (int i = 0; i < 4; i++)
-                
-            b[centralx+tetriminos.[rotacionActual][0][tetrRand].x][centraly+tetriminos.[rotacionActual][0][tetrRand].y].setBackground(rnd[tetrRand]);
-            b[centralx+tetriminos.[rotacionActual][1][tetrRand].x][centraly+tetriminos.[rotacionActual][1][tetrRand].y].setBackground(rnd[tetrRand]);
-            b[centralx+tetriminos.[rotacionActual][2][tetrRand].x][centraly+tetriminos.[rotacionActual][2][tetrRand].y].setBackground(rnd[tetrRand]);
-            b[centralx+tetriminos.[rotacionActual][3][tetrRand].x][centraly+tetriminos.[rotacionActual][3][tetrRand].y].setBackground(rnd[tetrRand]);
+                mapaVista.modificarColor(centralx + tetriminos.getX(tetrRand, rotacionActual, i),
+                        centraly + tetriminos.getY(tetrRand, rotacionActual, i),
+                        tetriminos.ObtenerColor(tetrRand));
         } else {
- 
             bottom = true;
         }
     }
@@ -260,19 +235,16 @@ public class Tetris extends JFrame implements KeyListener {
             } catch (InterruptedException e) {}
             movedown();
             rowcheck();
-        }
-        while (bottom == false);
+        } while (bottom == false);
         bottom = false;
         blockgen();
     }
  
     public void rowcheck(){
         int row = 0;
-        for (int y = 0;y<20;y++){
-            for (int x = 0;x<10;x++){
-                if (b[x][y].getBackground() != MapaVista.vacio){
-                    row++;
-                }
+        for (int y = 0; y < 20; y++){
+            for (int x = 0; x < 10; x++){
+                if (!mapaVista.celdaVacia(x, y)) row++;
                 if (row == 10){
                     filasEliminadas++;
                     rowclear(y);
@@ -285,37 +257,37 @@ public class Tetris extends JFrame implements KeyListener {
     public void rowclear(int y){
         int inc = 0;
         for (int x = 0;x<10;x++){
-            b[x][y].setBackground(MapaVista.vacio);
+            mapaVista.modificarColor(x, y, MapaVista.vacio);
         }
         for (int c = y-1;c>-1;c--){
             for (int x = 0;x<10;x++){
-                tmp[x][y-inc] = b[x][c].getBackground();
+                mapaVista.modificarColorAux(x, y-inc, mapaVista.obtenerColor(x, c));
             }
             inc++;
         }
         for (int c = y;c>-1;c--){
             for (int x = 0;x<10;x++){
-                b[x][c].setBackground(tmp[x][c]);
+                mapaVista.modificarColor(x, c, mapaVista.obtenerColorAux(x, c));
             }
         }
     }
  
-    public void mover(){
+    public void mover(int deltax){
         int[] m2 = {-1, -1, -1, -1};
         int[] m1 = {-1, -1, -1, -1};
         int[] zero = {-1, -1, -1, -1};
         int[] one = {-1, -1, -1, -1};
         int[] two = {-1, -1, -1, -1};
         for (int d = 0;d<4;d++){
-            if (tetriminos.[rotacionActual][d][tetrRand].y == -2){
+            if (tetriminos.getY(tetrRand, rotacionActual, d) == -2){
                 m2[d] = d;
-            } else if (tetriminos.[rotacionActual][d][tetrRand].y == -1){
+            } else if (tetriminos.getY(tetrRand, rotacionActual, d) == -1){
                 m1[d] = d;
-            } else if (tetriminos.[rotacionActual][d][tetrRand].y == 0){
+            } else if (tetriminos.getY(tetrRand, rotacionActual, d) == 0){
                 zero[d] = d;
-            } else if (tetriminos.[rotacionActual][d][tetrRand].y == 1){
+            } else if (tetriminos.getY(tetrRand, rotacionActual, d) == 1){
                 one[d] = d;
-            } else if (tetriminos.[rotacionActual][d][tetrRand].y == 2){
+            } else if (tetriminos.getY(tetrRand, rotacionActual, d) == 2){
                 two[d] = d;
             }
         }
@@ -327,28 +299,28 @@ public class Tetris extends JFrame implements KeyListener {
         if (deltax == 1){
             for (int d = 0;d<4;d++){
                 if (m2[d] != -1){
-                    if (tmpm2<tetriminos.[rotacionActual][m2[d]][tetrRand].x){
-                        tmpm2 = tetriminos.[rotacionActual][m2[d]][tetrRand].x;
+                    if (tmpm2 < tetriminos.getX(tetrRand, rotacionActual, m2[d])){
+                        tmpm2 = tetriminos.getX(tetrRand, rotacionActual, m2[d]);
                     }
                 }
                 if (m1[d] != -1){
-                    if (tmpm1<tetriminos.[rotacionActual][m1[d]][tetrRand].x){
-                        tmpm1 = tetriminos.[rotacionActual][m1[d]][tetrRand].x;
+                    if (tmpm1 < tetriminos.getX(tetrRand, rotacionActual, m1[d])){
+                        tmpm1 = tetriminos.getX(tetrRand, rotacionActual, m1[d]);
                     }
                 }
                 if (zero[d] != -1){
-                    if (tmpzero<tetriminos.[rotacionActual][zero[d]][tetrRand].x){
-                        tmpzero = tetriminos.[rotacionActual][zero[d]][tetrRand].x;
+                    if (tmpzero < tetriminos.getX(tetrRand, rotacionActual, zero[d])){
+                        tmpzero = tetriminos.getX(tetrRand, rotacionActual, zero[d]);
                     }
                 }
                 if (one[d] != -1){
-                    if (tmpone<tetriminos.[rotacionActual][one[d]][tetrRand].x){
-                        tmpone = tetriminos.[rotacionActual][one[d]][tetrRand].x;
+                    if (tmpone < tetriminos.getX(tetrRand, rotacionActual, one[d])){
+                        tmpone = tetriminos.getX(tetrRand, rotacionActual, one[d]);
                     }
                 }
                 if (two[d] != -1){
-                    if (tmptwo<tetriminos.[rotacionActual][two[d]][tetrRand].x){
-                        tmptwo = tetriminos.[rotacionActual][two[d]][tetrRand].x;
+                    if (tmptwo < tetriminos.getX(tetrRand, rotacionActual, two[d])){
+                        tmptwo = tetriminos.getX(tetrRand, rotacionActual, two[d]);
                     }
                 }
             }
@@ -360,75 +332,76 @@ public class Tetris extends JFrame implements KeyListener {
             tmptwo = 5;
             for (int d = 0;d<4;d++){
                 if (m2[d] != -1){
-                    if (tmpm2>tetriminos.[rotacionActual][m2[d]][tetrRand].x){
-                        tmpm2 = tetriminos.[rotacionActual][m2[d]][tetrRand].x;
+                    if (tmpm2 > tetriminos.getX(tetrRand, rotacionActual, m2[d])){
+                        tmpm2 = tetriminos.getX(tetrRand, rotacionActual, m2[d]);
                     }
                 }
                 if (m1[d] != -1){
-                    if (tmpm1>tetriminos.[rotacionActual][m1[d]][tetrRand].x){
-                        tmpm1 = tetriminos.[rotacionActual][m1[d]][tetrRand].x;
+                    if (tmpm1 > tetriminos.getX(tetrRand, rotacionActual, m1[d])){
+                        tmpm1 = tetriminos.getX(tetrRand, rotacionActual, m1[d]);
                     }
                 }
                 if (zero[d] != -1){
-                    if (tmpzero>tetriminos.[rotacionActual][zero[d]][tetrRand].x){
-                        tmpzero = tetriminos.[rotacionActual][zero[d]][tetrRand].x;
+                    if (tmpzero > tetriminos.getX(tetrRand, rotacionActual, zero[d])){
+                        tmpzero = tetriminos.getX(tetrRand, rotacionActual, zero[d]);
                     }
                 }
                 if (one[d] != -1){
-                    if (tmpone>tetriminos.[rotacionActual][one[d]][tetrRand].x){
-                        tmpone = tetriminos.[rotacionActual][one[d]][tetrRand].x;
+                    if (tmpone > tetriminos.getX(tetrRand, rotacionActual, one[d])){
+                        tmpone = tetriminos.getX(tetrRand, rotacionActual, one[d]);
                     }
                 }
                 if (two[d] != -1){
-                    if (tmptwo>tetriminos.[rotacionActual][two[d]][tetrRand].x){
-                        tmptwo = tetriminos.[rotacionActual][two[d]][tetrRand].x;
+                    if (tmptwo > tetriminos.getX(tetrRand, rotacionActual, two[d])){
+                        tmptwo = tetriminos.getX(tetrRand, rotacionActual, two[d]);
                     }
                 }
             }
         }
         int total = 0;
         for (int d = 0;d<4;d++){
-            if (tetriminos.[rotacionActual][d][tetrRand].y == -2){
-                if (perimetro[2+centralx+deltax+tmpm2][2+centraly-2] != 2){
-                    if(b[centralx+deltax+tmpm2][centraly-2].getBackground() == MapaVista.vacio){
+            if (tetriminos.getY(tetrRand, rotacionActual, d) == -2){
+                if (perimetro.obtenerValorCelda(2+centralx+deltax+tmpm2, 2+centraly-2) != 2){
+                    if(mapaVista.celdaVacia(centralx+deltax+tmpm2, centraly-2)){
                         total++;
                     }
                 }
-            } else if (tetriminos.[rotacionActual][d][tetrRand].y == -1){
-                if (perimetro[2+centralx+deltax+tmpm1][2+centraly-1] != 2){
-                    if (b[centralx+deltax+tmpm1][centraly-1].getBackground() == MapaVista.vacio){
+            } else if (tetriminos.getY(tetrRand, rotacionActual, d) == -1){
+                if (perimetro.obtenerValorCelda(2+centralx+deltax+tmpm1, 2+centraly-1) != 2){
+                    if (mapaVista.celdaVacia(centralx+deltax+tmpm1, centraly-1)){
                         total++;
                     }
                 }
-            } else if (tetriminos.[rotacionActual][d][tetrRand].y == 0){
-                if (perimetro[2+centralx+deltax+tmpzero][2+centraly] != 2){
-                    if (b[centralx+deltax+tmpzero][centraly].getBackground() == MapaVista.vacio){
+            } else if (tetriminos.getY(tetrRand, rotacionActual, d) == 0){
+                if (perimetro.obtenerValorCelda(2+centralx+deltax+tmpzero, 2+centraly) != 2){
+                    if (mapaVista.celdaVacia(centralx+deltax+tmpzero, centraly)){
                         total++;
                     }
                 }
-            } else if (tetriminos.[rotacionActual][d][tetrRand].y == 1){
-                if (perimetro[2+centralx+deltax+tmpone][2+centraly+1] != 2){
-                    if (b[centralx+deltax+tmpone][centraly+1].getBackground() == MapaVista.vacio){
+            } else if (tetriminos.getY(tetrRand, rotacionActual, d) == 1){
+                if (perimetro.obtenerValorCelda(2+centralx+deltax+tmpone, 2+centraly+1) != 2){
+                    if (mapaVista.celdaVacia(centralx+deltax+tmpone, centraly+1)){
                         total++;
                     }
                 }
-            } else if (tetriminos.[rotacionActual][d][tetrRand].y == 2){
-                if (perimetro[2+centralx+deltax+tmptwo][2+centraly+2] != 2){
-                    if (b[centralx+deltax+tmptwo][centraly+2].getBackground() == MapaVista.vacio){
+            } else if (tetriminos.getY(tetrRand, rotacionActual, d) == 2){
+                if (perimetro.obtenerValorCelda(2+centralx+deltax+tmptwo, 2+centraly+2) != 2){
+                    if (mapaVista.celdaVacia(centralx+deltax+tmptwo, centraly+2)){
                         total++;
                     }
                 }
             }
-        } if (total == 4){
-            b[centralx+tetriminos.[rotacionActual][0][tetrRand].x][centraly+tetriminos.[rotacionActual][0][tetrRand].y].setBackground(MapaVista.vacio);
-            b[centralx+tetriminos.[rotacionActual][1][tetrRand].x][centraly+tetriminos.[rotacionActual][1][tetrRand].y].setBackground(MapaVista.vacio);
-            b[centralx+tetriminos.[rotacionActual][2][tetrRand].x][centraly+tetriminos.[rotacionActual][2][tetrRand].y].setBackground(MapaVista.vacio);
-            b[centralx+tetriminos.[rotacionActual][3][tetrRand].x][centraly+tetriminos.[rotacionActual][3][tetrRand].y].setBackground(MapaVista.vacio);
-            centralx = centralx+deltax;
-            b[centralx+tetriminos.[rotacionActual][0][tetrRand].x][centraly+tetriminos.[rotacionActual][0][tetrRand].y].setBackground(rnd[tetrRand]);
-            b[centralx+tetriminos.[rotacionActual][1][tetrRand].x][centraly+tetriminos.[rotacionActual][1][tetrRand].y].setBackground(rnd[tetrRand]);
-            b[centralx+tetriminos.[rotacionActual][2][tetrRand].x][centraly+tetriminos.[rotacionActual][2][tetrRand].y].setBackground(rnd[tetrRand]);
-            b[centralx+tetriminos.[rotacionActual][3][tetrRand].x][centraly+tetriminos.[rotacionActual][3][tetrRand].y].setBackground(rnd[tetrRand]);
+        }
+        
+        if (total == 4){
+            for (int i = 0; i < 4; i++)
+                mapaVista.modificarColor(centralx + tetriminos.getX(tetrRand, rotacionActual, i),
+                        centraly + tetriminos.getY(tetrRand, rotacionActual, i),
+                        MapaVista.vacio);
+            centralx += deltax;
+            for (int i = 0; i < 4; i++)
+                mapaVista.modificarColor(centralx + tetriminos.getX(tetrRand, rotacionActual, i),
+                        centraly + tetriminos.getY(tetrRand, rotacionActual, i), tetriminos.ObtenerColor(tetrRand));
         }
     }
  
@@ -442,7 +415,7 @@ public class Tetris extends JFrame implements KeyListener {
             mover(1);
         if (e.getKeyCode() == KeyEvent.VK_LEFT)
             mover(-1);
-        if (e.getKeyCode() == KeyEvent.VK_UP)
+        if (e.getKeyCode() == KeyEvent.VK_SHIFT) //VK_UP
             rotate();
         if (e.getKeyCode() == KeyEvent.VK_DOWN)
             movedown();
