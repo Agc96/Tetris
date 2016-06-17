@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Vista;
+package Controlador;
 
 import java.awt.Color;
 import javax.swing.JButton;
@@ -26,13 +26,13 @@ public class MapaVista {
         this.mapa = new JButton[numColumnas][numFilas];
         this.aux = new Color[numColumnas][numFilas];
         //Crear los casilleros (grid) y colocarlos en la ventana
-        for (int i = 0; i < numColumnas; i++)
-            for (int j = 0; j < numFilas; j++) {
-                this.mapa[i][j] = new JButton(" ");
-                this.mapa[i][j].setBackground(vacio);
-                this.mapa[i][j].setEnabled(true);
-                ventana.add(this.mapa[i][j]);
-                this.aux[i][j] = vacio;
+        for (int y = 0; y < numFilas; y++)
+            for (int x = 0; x < numColumnas; x++) {
+                this.mapa[x][y] = new JButton(" ");
+                this.mapa[x][y].setBackground(vacio);
+                this.mapa[x][y].setEnabled(false);
+                ventana.add(this.mapa[x][y]);
+                this.aux[x][y] = vacio;
             }     
     }
     

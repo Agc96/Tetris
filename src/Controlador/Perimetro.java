@@ -21,7 +21,7 @@ public class Perimetro {
         //Llenar los campos
         for (int y = 0; y < 2; y++){
             for (int x = 0; x < numColumnas+4; x++){
-                this.mapa[x][0]= 1;
+                this.mapa[x][y]= 1;
             }
         }
         for (int y = numFilas + 2; y < numFilas + 4; y++)
@@ -37,16 +37,18 @@ public class Perimetro {
                 this.mapa[x][y]= 2;
             }
         }
+        
+        this.imprimirDatos();
     }
     
-//    public void imprimirDatos() {
-//        for (int y = 0; y < numFilas + 4; y++){
-//            for (int x = 0; x < numColumnas + 4; x++){
-//                System.out.print(this.mapa[x][y]);
-//            }
-//            System.out.println("");
-//        }
-//    }
+    public void imprimirDatos() {
+        for (int y = 0; y < numFilas + 4; y++){
+            for (int x = 0; x < numColumnas + 4; x++){
+                System.out.print(this.mapa[x][y]);
+            }
+            System.out.println("");
+        }
+    }
     
     public int obtenerValorCelda(int x, int y) {
         return this.mapa[x][y];

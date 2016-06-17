@@ -49,23 +49,25 @@ public class GestorTetriminos {
         this.tetriminos[4].setColor(Color.white);
         this.tetriminos[5].setColor(Color.blue);
         this.tetriminos[6].setColor(Color.orange);
+        
+        this.imprimirDatos();
     }
     
-//    public void imprimirDatos() {
-//        for (int t = 0; t < 7; t++) {
-//            System.out.println("Tetrimino " + t);
-//            Tetrimino tetrimino = this.tetriminos[t];
-//            for (int r = 0; r < 4; r++) {
-//                for (int p = 0; p < 4; p++) {
-//                    Celda celda = tetrimino.obtenerCelda(r, p);
-//                    if (p != 0) System.out.print(",");
-//                    System.out.print(celda.getX() + "," + celda.getY());
-//                }
-//                System.out.println();
-//            }
-//        }
-//        System.out.println("OK");
-//    }
+    public void imprimirDatos() {
+        for (int t = 0; t < 7; t++) {
+            System.out.println("Tetrimino " + t);
+            Tetrimino tetrimino = this.tetriminos[t];
+            for (int r = 0; r < 4; r++) {
+                for (int p = 0; p < 4; p++) {
+                    Celda celda = tetrimino.obtenerCelda(r, p);
+                    if (p != 0) System.out.print(",");
+                    System.out.print(celda.getX() + "," + celda.getY());
+                }
+                System.out.println();
+            }
+        }
+        System.out.println("OK");
+    }
     
     //PLACEHOLDER
     public Tetrimino ObtenerTetrimino(int index) {
