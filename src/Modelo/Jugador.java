@@ -59,13 +59,13 @@ public class Jugador {
         this.bottom = bottom;
     }
     
-    public void generarTetriminoAleatorio() {
+    public void generarTetriminoAleatorio(int centralX) {
         this.rotaActual = 0;
         this.rotaAntigua = 1;
         this.tetriminoRandom = (int) (Math.floor(Math.random()*7));
-        this.centralX = 4;
+        this.centralX = centralX;
         this.centralY = 0;
-        System.out.println("Se selecciono el tetrimino " + tetriminoRandom);
+        System.out.println("Tetrimonio " + tetriminoRandom);
     }
     
 }

@@ -16,17 +16,19 @@ import javax.swing.*;
 
 import Modelo.*;
 import Controlador.*;
+import static Controlador.MapaVista.vacio;
  
 public class Ventana extends JFrame implements KeyListener {
     //Datos no modificables que se usarán en todo el juego
     public static final int numFilas = 20;
-    public static final int numColumnas = 10;    
+    public static final int numColumnas = 15;    
     //Clases auxiliares controladoras
     private MapaVista mapaVista;
     private GestorTetriminos tetriminos;
     private Perimetro perimetro;
     //Datos del juego
     private GestorJugadores jugadores;
+    private JButton[][] mapa;
     private int indexJugador;
     boolean bottom; //Determina si se llego al fondo o no
     
@@ -38,6 +40,14 @@ public class Ventana extends JFrame implements KeyListener {
         this.tetriminos = new GestorTetriminos();
         this.perimetro = new Perimetro();
         this.mapaVista = new MapaVista(this);
+        this.mapa = new JButton[numColumnas][numFilas];
+        for (int y = 0; y < numFilas; y++)
+            for (int x = 0; x < numColumnas; x++) {
+                this.mapa[x][y] = new JButton(" ");
+                this.mapa[x][y].setBackground(vacio);
+                this.mapa[x][y].setEnabled(false);
+                this.add(this.mapa[x][y]);
+            }
         //Configurar datos de ventana
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);        
         this.setLayout(new GridLayout(numFilas,numColumnas));     
@@ -74,19 +84,20 @@ public class Ventana extends JFrame implements KeyListener {
         //concluye que hemos perdido el juego.
         if (continuaJuego()) {
             for (int i = 0; i < 4; i++)
-                mapaVista.modificarColor(4 + tetriminos.getX(
+                mapaVista.modificarColor(this.jugadores.getCentralX(indexJugador) + tetriminos.getX(
                         jugadores.getTetriminoRandom(0), jugadores.getRotaActual(0), i),
                         tetriminos.getY(jugadores.getTetriminoRandom(0),
                                 jugadores.getRotaActual(0), i),
                         tetriminos.ObtenerColor(jugadores.getTetriminoRandom(0)));
             if (jugadores.cantidadJugadores() > 1) {
                 for (int i = 0; i < 4; i++)
-                    mapaVista.modificarColor(4 + tetriminos.getX(
+                    mapaVista.modificarColor(this.jugadores.getCentralX(indexJugador) + tetriminos.getX(
                             jugadores.getTetriminoRandom(1), jugadores.getRotaActual(1), i),
                             tetriminos.getY(jugadores.getTetriminoRandom(1),
                                     jugadores.getRotaActual(1), i),
                             tetriminos.ObtenerColor(jugadores.getTetriminoRandom(1)));
             }
+            this.colorear();
             this.go(indexJugador);
         }
         else { //Fin del juego
@@ -94,6 +105,13 @@ public class Ventana extends JFrame implements KeyListener {
                     + jugadores.getFilasEliminadas() + " filas, bien hecho!");
             System.exit(0);
         }
+    }
+    
+    private void colorear(){
+        for (int y = 0; y < numFilas; y++)
+            for (int x = 0; x < numColumnas; x++) {
+                this.mapa[x][y].setBackground(this.mapaVista.obtenerColor(x, y));
+            }  
     }
     
     public boolean validoRotar(int centralx, int centraly, int tetrRand,
@@ -110,8 +128,6 @@ public class Ventana extends JFrame implements KeyListener {
     
     public void rotate(int index){
         if (indexJugador < 0 || indexJugador > 1) return;
-        
-        
         
         if (this.jugadores.getRotaActual(index) < 3){
             this.jugadores.setRotaAntigua(this.jugadores.getRotaActual(index), index);
@@ -148,6 +164,7 @@ public class Ventana extends JFrame implements KeyListener {
                 this.jugadores.setRotaAntigua(3, index);
             }
         }
+        this.colorear();
     }
  
     public void movedown(int index){
@@ -252,6 +269,7 @@ public class Ventana extends JFrame implements KeyListener {
         } else {
             bottom = true;
         }
+        this.colorear();
     }
  
  
@@ -261,7 +279,9 @@ public class Ventana extends JFrame implements KeyListener {
                 Thread.sleep(1000L);
             } catch (InterruptedException e) {}
             movedown(index);
+            this.colorear();
             rowcheck();
+            this.colorear();
         } while (bottom == false);
         bottom = false;
         blockgen();
@@ -297,6 +317,7 @@ public class Ventana extends JFrame implements KeyListener {
                 mapaVista.modificarColor(x, c, mapaVista.obtenerColorAux(x, c));
             }
         }
+        this.colorear();
     }
  
     public void mover(int deltax, int index){
@@ -439,6 +460,7 @@ public class Ventana extends JFrame implements KeyListener {
                 mapaVista.modificarColor(centralx + tetriminos.getX(tetrRand, rotacionActual, i),
                         centraly + tetriminos.getY(tetrRand, rotacionActual, i), tetriminos.ObtenerColor(tetrRand));
         }
+        this.colorear();
     }
     
     @Override

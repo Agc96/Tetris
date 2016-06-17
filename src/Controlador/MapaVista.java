@@ -16,22 +16,19 @@ import static Vista.Ventana.*;
  * @author Anthony
  */
 public class MapaVista {
-    private JButton[][] mapa;
+    private Color[][] mapaColor;
     private Color[][] aux;
     //Color para la "celda vacía"
     public static final Color vacio = Color.DARK_GRAY;
     
     public MapaVista(JFrame ventana) {
         //Generar mapa
-        this.mapa = new JButton[numColumnas][numFilas];
+        this.mapaColor = new Color[numColumnas][numFilas];
         this.aux = new Color[numColumnas][numFilas];
         //Crear los casilleros (grid) y colocarlos en la ventana
         for (int y = 0; y < numFilas; y++)
             for (int x = 0; x < numColumnas; x++) {
-                this.mapa[x][y] = new JButton(" ");
-                this.mapa[x][y].setBackground(vacio);
-                this.mapa[x][y].setEnabled(false);
-                ventana.add(this.mapa[x][y]);
+                this.mapaColor[x][y] = vacio;
                 this.aux[x][y] = vacio;
             }     
     }
@@ -44,13 +41,13 @@ public class MapaVista {
     }
     
     public Color obtenerColor(int x, int y) {
-        return this.mapa[x][y].getBackground();
+        return this.mapaColor[x][y];
     } 
     public void modificarColor(int x, int y, Color color) {
-        this.mapa[x][y].setBackground(color);
+        this.mapaColor[x][y] = color;
     }
     
     public boolean celdaVacia(int x, int y) {
-        return (this.mapa[x][y].getBackground() == vacio);
+        return (this.mapaColor[x][y] == vacio);
     }
 }

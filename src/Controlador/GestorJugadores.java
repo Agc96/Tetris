@@ -38,7 +38,10 @@ public class GestorJugadores {
     }
     
     public void generarTetriminoAleatorio(int index) {
-        this.jugadores.get(index).generarTetriminoAleatorio();
+        if (index == 0)
+            this.jugadores.get(index).generarTetriminoAleatorio(8);
+        else if (index == 1)
+            this.jugadores.get(index).generarTetriminoAleatorio(2);
     }
     
     /**************** GETS Y SETS ****************/
