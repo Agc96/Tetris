@@ -17,29 +17,39 @@ import javax.swing.*;
 import Modelo.*;
 import Controlador.*;
 import static Controlador.MapaVista.vacio;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
  
 public class Ventana extends JFrame implements KeyListener {
     //Datos no modificables que se usarán en todo el juego
     public static final int numFilas = 20;
     public static final int numColumnas = 15;    
     //Clases auxiliares controladoras
-    private MapaVista mapaVista;
-    private GestorTetriminos tetriminos;
-    private Perimetro perimetro;
+    private IMapaVista mapaVista;
+    private IGestorJugadores jugadores;
+    private IPerimetro perimetro;
     //Datos del juego
-    private GestorJugadores jugadores;
+    private GestorTetriminos tetriminos;
     private JButton[][] mapa;
     private int indexJugador;
     boolean bottom; //Determina si se llego al fondo o no
     
-    public Ventana() {
+    public Ventana(String ip, String port) throws RemoteException, NotBoundException, MalformedURLException{
         //Configurar datos de juego
-        this.jugadores = new GestorJugadores();
+        //this.jugadores = new GestorJugadores();
+        this.jugadores = (IGestorJugadores) Naming.lookup(("//"+ip+":"+port+"/jugadores"));
         this.indexJugador = this.jugadores.agregarJugador();
         //Configurar clases auxiliares
+        //this.perimetro = new Perimetro();
+        //this.mapaVista = new MapaVista();
+        this.perimetro = (IPerimetro)Naming.lookup(("//"+ip+":"+port+"/perimetro"));
+        this.mapaVista = (IMapaVista)Naming.lookup(("//"+ip+":"+port+"/mapaVista"));
+        ////////////////////////////////////
         this.tetriminos = new GestorTetriminos();
-        this.perimetro = new Perimetro();
-        this.mapaVista = new MapaVista(this);
         this.mapa = new JButton[numColumnas][numFilas];
         for (int y = 0; y < numFilas; y++)
             for (int x = 0; x < numColumnas; x++) {
@@ -58,7 +68,7 @@ public class Ventana extends JFrame implements KeyListener {
         this.blockgen();
     }
     
-    public boolean continuaJuego() {
+    public boolean continuaJuego() throws RemoteException{
         boolean aux = true;
         for (int i = 0; i < 4; i++)
             aux = aux && mapaVista.celdaVacia(4 + tetriminos.getX(
@@ -77,7 +87,7 @@ public class Ventana extends JFrame implements KeyListener {
         return aux; 
     }
     
-    public void blockgen() {
+    public void blockgen() throws RemoteException{
         this.jugadores.generarTetriminoAleatorio(indexJugador);
         //Queremos imprimir un tetrimino aleatorio, si todos esos casilleros
         //son grises (vacíos), entonces no hay problema, de lo contrario se
@@ -107,7 +117,7 @@ public class Ventana extends JFrame implements KeyListener {
         }
     }
     
-    private void colorear(){
+    private void colorear() throws RemoteException {
         for (int y = 0; y < numFilas; y++)
             for (int x = 0; x < numColumnas; x++) {
                 this.mapa[x][y].setBackground(this.mapaVista.obtenerColor(x, y));
@@ -115,7 +125,7 @@ public class Ventana extends JFrame implements KeyListener {
     }
     
     public boolean validoRotar(int centralx, int centraly, int tetrRand,
-            int rotacionActual) {
+            int rotacionActual) throws RemoteException {
         boolean valido = true;
         for (int i = 0; i < 4; i++) {
             int valor = perimetro.obtenerValorCelda(
@@ -126,7 +136,7 @@ public class Ventana extends JFrame implements KeyListener {
         return valido;
     }
     
-    public void rotate(int index){
+    public void rotate(int index) throws RemoteException{
         if (indexJugador < 0 || indexJugador > 1) return;
         
         if (this.jugadores.getRotaActual(index) < 3){
@@ -167,7 +177,7 @@ public class Ventana extends JFrame implements KeyListener {
         this.colorear();
     }
  
-    public void movedown(int index){
+    public void movedown(int index) throws RemoteException{
         if (index < 0 || index > 1) return;
         
         int[] m2 = {-1, -1, -1, -1};
@@ -273,7 +283,7 @@ public class Ventana extends JFrame implements KeyListener {
     }
  
  
-    public void go(int index){
+    public void go(int index) throws RemoteException{
         do{
             try {
                 Thread.sleep(1000L);
@@ -287,7 +297,7 @@ public class Ventana extends JFrame implements KeyListener {
         blockgen();
     }
  
-    public void rowcheck(){
+    public void rowcheck() throws RemoteException{
         int row = 0;
         for (int y = 0; y < numFilas; y++){
             for (int x = 0; x < numColumnas; x++){
@@ -301,7 +311,7 @@ public class Ventana extends JFrame implements KeyListener {
         }
     }
  
-    public void rowclear(int y){
+    public void rowclear(int y) throws RemoteException{
         int inc = 0;
         for (int x = 0;x<numColumnas;x++){
             mapaVista.modificarColor(x, y, MapaVista.vacio);
@@ -320,7 +330,7 @@ public class Ventana extends JFrame implements KeyListener {
         this.colorear();
     }
  
-    public void mover(int deltax, int index){
+    public void mover(int deltax, int index) throws RemoteException{
         if (index < 0 || index > 1) return;
         
         int[] m2 = {-1, -1, -1, -1};
@@ -466,24 +476,32 @@ public class Ventana extends JFrame implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (this.indexJugador == 0) {
-            if (e.getKeyCode() == KeyEvent.VK_D)
-                mover(1, this.indexJugador);
-            if (e.getKeyCode() == KeyEvent.VK_A)
-                mover(-1, this.indexJugador);
-            if (e.getKeyCode() == KeyEvent.VK_W)
-                rotate(this.indexJugador);
-            if (e.getKeyCode() == KeyEvent.VK_S)
-                movedown(this.indexJugador);
+            try {
+                if (e.getKeyCode() == KeyEvent.VK_D)
+                    mover(1, this.indexJugador);
+                if (e.getKeyCode() == KeyEvent.VK_A)
+                    mover(-1, this.indexJugador);
+                if (e.getKeyCode() == KeyEvent.VK_W)
+                    rotate(this.indexJugador);
+                if (e.getKeyCode() == KeyEvent.VK_S)
+                    movedown(this.indexJugador);
+            } catch (RemoteException ex) {
+                Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         if (this.indexJugador == 1) {
-            if (e.getKeyCode() == KeyEvent.VK_RIGHT)
-                mover(1, this.indexJugador);
-            if (e.getKeyCode() == KeyEvent.VK_LEFT)
-                mover(-1, this.indexJugador);
-            if (e.getKeyCode() == KeyEvent.VK_UP)
-                rotate(this.indexJugador);
-            if (e.getKeyCode() == KeyEvent.VK_DOWN)
-                movedown(this.indexJugador);
+            try {
+                if (e.getKeyCode() == KeyEvent.VK_RIGHT)
+                    mover(1, this.indexJugador);
+                if (e.getKeyCode() == KeyEvent.VK_LEFT)
+                    mover(-1, this.indexJugador);
+                if (e.getKeyCode() == KeyEvent.VK_UP)
+                    rotate(this.indexJugador);
+                if (e.getKeyCode() == KeyEvent.VK_DOWN)
+                    movedown(this.indexJugador);
+            } catch (RemoteException ex) {
+                Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
  

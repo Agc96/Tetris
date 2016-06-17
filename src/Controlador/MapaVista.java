@@ -10,18 +10,20 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import static Vista.Ventana.*;
+import java.rmi.server.UnicastRemoteObject;
+import java.rmi.RemoteException;
 
 /**
  *
  * @author Anthony
  */
-public class MapaVista {
+public class MapaVista extends UnicastRemoteObject implements IMapaVista{
     private Color[][] mapaColor;
     private Color[][] aux;
     //Color para la "celda vacía"
     public static final Color vacio = Color.DARK_GRAY;
     
-    public MapaVista(JFrame ventana) {
+    public MapaVista() throws RemoteException {
         //Generar mapa
         this.mapaColor = new Color[numColumnas][numFilas];
         this.aux = new Color[numColumnas][numFilas];
@@ -33,17 +35,18 @@ public class MapaVista {
             }     
     }
     
-    public Color obtenerColorAux(int x, int y) {
+    public Color obtenerColorAux(int x, int y) throws RemoteException {
         return this.aux[x][y];
     } 
-    public void modificarColorAux(int x, int y, Color color) {
+    public void modificarColorAux(int x, int y, Color color)throws RemoteException  {
+        System.out.println("X: "+x+" Y: "+y);
         this.aux[x][y] = color;
     }
     
-    public Color obtenerColor(int x, int y) {
+    public Color obtenerColor(int x, int y) throws RemoteException {
         return this.mapaColor[x][y];
     } 
-    public void modificarColor(int x, int y, Color color) {
+    public void modificarColor(int x, int y, Color color) throws RemoteException {
         this.mapaColor[x][y] = color;
     }
     

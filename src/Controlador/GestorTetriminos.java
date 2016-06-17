@@ -53,7 +53,7 @@ public class GestorTetriminos {
         this.imprimirDatos();
     }
     
-    public void imprimirDatos() {
+    private void imprimirDatos() {
         for (int t = 0; t < 7; t++) {
             System.out.println("Tetrimino " + t);
             Tetrimino tetrimino = this.tetriminos[t];
