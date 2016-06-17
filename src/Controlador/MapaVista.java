@@ -9,7 +9,7 @@ import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import static Vista.Tetris.*;
+import static Vista.Ventana.*;
 
 /**
  *

@@ -10,7 +10,7 @@ package Controlador;
  * @author Anthony
  */
 
-import static Vista.Tetris.*;
+import static Vista.Ventana.*;
 
 public class Perimetro {
     private final int[][] mapa;
