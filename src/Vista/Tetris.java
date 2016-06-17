@@ -135,8 +135,8 @@ public class Tetris extends JFrame implements KeyListener {
         int xs = 0;
         int[] xf = {-1, -1, -1, -1};
         for (int d = 0;d<4;d++){
-            if ((xf[0] != prof[pos[0]][d][rand-1].x) || (xf[1] != prof[pos[0]][d][rand-1].x) || (xf[2] != prof[pos[0]][d][rand-1].x) || (xf[3] != prof[pos[0]][d][rand-1].x)){
-                xf[d] = prof[pos[0]][d][rand-1].x;
+            if ((xf[0] != tetriminos.[rotacionActual][d][tetrRand].x) || (xf[1] != tetriminos.[rotacionActual][d][tetrRand].x) || (xf[2] != tetriminos.[rotacionActual][d][tetrRand].x) || (xf[3] != tetriminos.[rotacionActual][d][tetrRand].x)){
+                xf[d] = tetriminos.[rotacionActual][d][tetrRand].x;
             }
         }
         for (int d = 0;d<4;d++){
@@ -155,15 +155,15 @@ public class Tetris extends JFrame implements KeyListener {
         int[] one = {-1, -1, -1, -1};
         int[] two = {-1, -1, -1, -1};
         for (int d = 0;d<4;d++){
-            if (prof[pos[0]][d][rand-1].x == -2){
+            if (tetriminos.[rotacionActual][d][tetrRand].x == -2){
                 m2[d] = d;
-            } else if (prof[pos[0]][d][rand-1].x == -1){
+            } else if (tetriminos.[rotacionActual][d][tetrRand].x == -1){
                 m1[d] = d;
-            } else if (prof[pos[0]][d][rand-1].x == 0){
+            } else if (tetriminos.[rotacionActual][d][tetrRand].x == 0){
                 zero[d] = d;
-            } else if (prof[pos[0]][d][rand-1].x == 1){
+            } else if (tetriminos.[rotacionActual][d][tetrRand].x == 1){
                 one[d] = d;
-            } else if (prof[pos[0]][d][rand-1].x == 2){
+            } else if (tetriminos.[rotacionActual][d][tetrRand].x == 2){
                 two[d] = d;
             }
         }
@@ -174,75 +174,77 @@ public class Tetris extends JFrame implements KeyListener {
         int tmptwo = -5;
         for (int d = 0;d<4;d++){
             if (m2[d] != -1){
-                if (tmpm2<prof[pos[0]][m2[d]][rand-1].y){
-                    tmpm2 = prof[pos[0]][m2[d]][rand-1].y;
+                if (tmpm2<tetriminos.[rotacionActual][m2[d]][tetrRand].y){
+                    tmpm2 = tetriminos.[rotacionActual][m2[d]][tetrRand].y;
                 }
             }
             if (m1[d] != -1){
-                if (tmpm1<prof[pos[0]][m1[d]][rand-1].y){
-                    tmpm1 = prof[pos[0]][m1[d]][rand-1].y;
+                if (tmpm1<tetriminos.[rotacionActual][m1[d]][tetrRand].y){
+                    tmpm1 = tetriminos.[rotacionActual][m1[d]][tetrRand].y;
                 }
             }
             if (zero[d] != -1){
-                if (tmpzero<prof[pos[0]][zero[d]][rand-1].y){
-                    tmpzero = prof[pos[0]][zero[d]][rand-1].y;
+                if (tmpzero<tetriminos.[rotacionActual][zero[d]][tetrRand].y){
+                    tmpzero = tetriminos.[rotacionActual][zero[d]][tetrRand].y;
                 }
             }
             if (one[d] != -1){
-                if (tmpone<prof[pos[0]][one[d]][rand-1].y){
-                    tmpone = prof[pos[0]][one[d]][rand-1].y;
+                if (tmpone<tetriminos.[rotacionActual][one[d]][tetrRand].y){
+                    tmpone = tetriminos.[rotacionActual][one[d]][tetrRand].y;
                 }
             }
             if (two[d] != -1){
-                if (tmptwo<prof[pos[0]][two[d]][rand-1].y){
-                    tmptwo = prof[pos[0]][two[d]][rand-1].y;
+                if (tmptwo<tetriminos.[rotacionActual][two[d]][tetrRand].y){
+                    tmptwo = tetriminos.[rotacionActual][two[d]][tetrRand].y;
                 }
             }
         }
         int total = 0;
         for (int d = 0;d<4;d++){
-            if (prof[pos[0]][d][rand-1].x == -2){
-                if (perim[2+centralx+-2][2+centraly+tmpm2+1] != 4){
-                    if(b[centralx+-2][centraly+tmpm2+1].getBackground() == Color.DARK_GRAY){
+            if (tetriminos.[rotacionActual][d][tetrRand].x == -2){
+                if (perimetro[2+centralx+-2][2+centraly+tmpm2+1] != 4){
+                    if(b[centralx+-2][centraly+tmpm2+1].getBackground() == MapaVista.vacio){
                         total++;
                     }
                 }
-            } else if (prof[pos[0]][d][rand-1].x == -1){
-                if (perim[2+centralx+-1][2+centraly+tmpm1+1] != 4){
-                    if (b[centralx+-1][centraly+tmpm1+1].getBackground() == Color.DARK_GRAY){
+            } else if (tetriminos.[rotacionActual][d][tetrRand].x == -1){
+                if (perimetro[2+centralx+-1][2+centraly+tmpm1+1] != 4){
+                    if (b[centralx+-1][centraly+tmpm1+1].getBackground() == MapaVista.vacio){
                         total++;
                     }
                 }
-            } else if (prof[pos[0]][d][rand-1].x == 0){
-                if (perim[2+centralx][2+centraly+tmpzero+1] != 4){
-                    if (b[centralx][centraly+tmpzero+1].getBackground() == Color.DARK_GRAY){
+            } else if (tetriminos.[rotacionActual][d][tetrRand].x == 0){
+                if (perimetro[2+centralx][2+centraly+tmpzero+1] != 4){
+                    if (b[centralx][centraly+tmpzero+1].getBackground() == MapaVista.vacio){
                         total++;
                     }
                 }
-            } else if (prof[pos[0]][d][rand-1].x == 1){
-                if (perim[2+centralx+1][2+centraly+tmpone+1] != 4){
-                    if (b[centralx+1][centraly+tmpone+1].getBackground() == Color.DARK_GRAY){
+            } else if (tetriminos.[rotacionActual][d][tetrRand].x == 1){
+                if (perimetro[2+centralx+1][2+centraly+tmpone+1] != 4){
+                    if (b[centralx+1][centraly+tmpone+1].getBackground() == MapaVista.vacio){
                         total++;
                     }
                 }
-            } else if (prof[pos[0]][d][rand-1].x == 2){
-                if (perim[2+centralx+2][2+centraly+tmptwo+1] != 4){
-                    if (b[centralx+2][centraly+tmptwo+1].getBackground() == Color.DARK_GRAY){
+            } else if (tetriminos.[rotacionActual][d][tetrRand].x == 2){
+                if (perimetro[2+centralx+2][2+centraly+tmptwo+1] != 4){
+                    if (b[centralx+2][centraly+tmptwo+1].getBackground() == MapaVista.vacio){
                         total++;
                     }
                 }
             }
         }
         if (total == 4){
-            b[centralx+prof[pos[0]][0][rand-1].x][centraly+prof[pos[0]][0][rand-1].y].setBackground(Color.DARK_GRAY);
-            b[centralx+prof[pos[0]][1][rand-1].x][centraly+prof[pos[0]][1][rand-1].y].setBackground(Color.DARK_GRAY);
-            b[centralx+prof[pos[0]][2][rand-1].x][centraly+prof[pos[0]][2][rand-1].y].setBackground(Color.DARK_GRAY);
-            b[centralx+prof[pos[0]][3][rand-1].x][centraly+prof[pos[0]][3][rand-1].y].setBackground(Color.DARK_GRAY);
+            for (int i = 0; i < 4; i++)
+                mapaVista.modificarColor(centralx + tetriminos.getX(tetrRand, rotacionActual, i),
+                        centraly + tetriminos.getY(tetrRand, rotacionActual, i),
+                        MapaVista.vacio);
             centraly++;
-            b[centralx+prof[pos[0]][0][rand-1].x][centraly+prof[pos[0]][0][rand-1].y].setBackground(rnd[rand-1]);
-            b[centralx+prof[pos[0]][1][rand-1].x][centraly+prof[pos[0]][1][rand-1].y].setBackground(rnd[rand-1]);
-            b[centralx+prof[pos[0]][2][rand-1].x][centraly+prof[pos[0]][2][rand-1].y].setBackground(rnd[rand-1]);
-            b[centralx+prof[pos[0]][3][rand-1].x][centraly+prof[pos[0]][3][rand-1].y].setBackground(rnd[rand-1]);
+            for (int i = 0; i < 4; i++)
+                
+            b[centralx+tetriminos.[rotacionActual][0][tetrRand].x][centraly+tetriminos.[rotacionActual][0][tetrRand].y].setBackground(rnd[tetrRand]);
+            b[centralx+tetriminos.[rotacionActual][1][tetrRand].x][centraly+tetriminos.[rotacionActual][1][tetrRand].y].setBackground(rnd[tetrRand]);
+            b[centralx+tetriminos.[rotacionActual][2][tetrRand].x][centraly+tetriminos.[rotacionActual][2][tetrRand].y].setBackground(rnd[tetrRand]);
+            b[centralx+tetriminos.[rotacionActual][3][tetrRand].x][centraly+tetriminos.[rotacionActual][3][tetrRand].y].setBackground(rnd[tetrRand]);
         } else {
  
             bottom = true;
@@ -267,7 +269,7 @@ public class Tetris extends JFrame implements KeyListener {
         int row = 0;
         for (int y = 0;y<20;y++){
             for (int x = 0;x<10;x++){
-                if (b[x][y].getBackground() != Color.DARK_GRAY){
+                if (b[x][y].getBackground() != MapaVista.vacio){
                     row++;
                 }
                 if (row == 10){
@@ -282,7 +284,7 @@ public class Tetris extends JFrame implements KeyListener {
     public void rowclear(int y){
         int inc = 0;
         for (int x = 0;x<10;x++){
-            b[x][y].setBackground(Color.DARK_GRAY);
+            b[x][y].setBackground(MapaVista.vacio);
         }
         for (int c = y-1;c>-1;c--){
             for (int x = 0;x<10;x++){
@@ -304,15 +306,15 @@ public class Tetris extends JFrame implements KeyListener {
         int[] one = {-1, -1, -1, -1};
         int[] two = {-1, -1, -1, -1};
         for (int d = 0;d<4;d++){
-            if (prof[pos[0]][d][rand-1].y == -2){
+            if (tetriminos.[rotacionActual][d][tetrRand].y == -2){
                 m2[d] = d;
-            } else if (prof[pos[0]][d][rand-1].y == -1){
+            } else if (tetriminos.[rotacionActual][d][tetrRand].y == -1){
                 m1[d] = d;
-            } else if (prof[pos[0]][d][rand-1].y == 0){
+            } else if (tetriminos.[rotacionActual][d][tetrRand].y == 0){
                 zero[d] = d;
-            } else if (prof[pos[0]][d][rand-1].y == 1){
+            } else if (tetriminos.[rotacionActual][d][tetrRand].y == 1){
                 one[d] = d;
-            } else if (prof[pos[0]][d][rand-1].y == 2){
+            } else if (tetriminos.[rotacionActual][d][tetrRand].y == 2){
                 two[d] = d;
             }
         }
@@ -324,28 +326,28 @@ public class Tetris extends JFrame implements KeyListener {
         if (deltax == 1){
             for (int d = 0;d<4;d++){
                 if (m2[d] != -1){
-                    if (tmpm2<prof[pos[0]][m2[d]][rand-1].x){
-                        tmpm2 = prof[pos[0]][m2[d]][rand-1].x;
+                    if (tmpm2<tetriminos.[rotacionActual][m2[d]][tetrRand].x){
+                        tmpm2 = tetriminos.[rotacionActual][m2[d]][tetrRand].x;
                     }
                 }
                 if (m1[d] != -1){
-                    if (tmpm1<prof[pos[0]][m1[d]][rand-1].x){
-                        tmpm1 = prof[pos[0]][m1[d]][rand-1].x;
+                    if (tmpm1<tetriminos.[rotacionActual][m1[d]][tetrRand].x){
+                        tmpm1 = tetriminos.[rotacionActual][m1[d]][tetrRand].x;
                     }
                 }
                 if (zero[d] != -1){
-                    if (tmpzero<prof[pos[0]][zero[d]][rand-1].x){
-                        tmpzero = prof[pos[0]][zero[d]][rand-1].x;
+                    if (tmpzero<tetriminos.[rotacionActual][zero[d]][tetrRand].x){
+                        tmpzero = tetriminos.[rotacionActual][zero[d]][tetrRand].x;
                     }
                 }
                 if (one[d] != -1){
-                    if (tmpone<prof[pos[0]][one[d]][rand-1].x){
-                        tmpone = prof[pos[0]][one[d]][rand-1].x;
+                    if (tmpone<tetriminos.[rotacionActual][one[d]][tetrRand].x){
+                        tmpone = tetriminos.[rotacionActual][one[d]][tetrRand].x;
                     }
                 }
                 if (two[d] != -1){
-                    if (tmptwo<prof[pos[0]][two[d]][rand-1].x){
-                        tmptwo = prof[pos[0]][two[d]][rand-1].x;
+                    if (tmptwo<tetriminos.[rotacionActual][two[d]][tetrRand].x){
+                        tmptwo = tetriminos.[rotacionActual][two[d]][tetrRand].x;
                     }
                 }
             }
@@ -357,75 +359,75 @@ public class Tetris extends JFrame implements KeyListener {
             tmptwo = 5;
             for (int d = 0;d<4;d++){
                 if (m2[d] != -1){
-                    if (tmpm2>prof[pos[0]][m2[d]][rand-1].x){
-                        tmpm2 = prof[pos[0]][m2[d]][rand-1].x;
+                    if (tmpm2>tetriminos.[rotacionActual][m2[d]][tetrRand].x){
+                        tmpm2 = tetriminos.[rotacionActual][m2[d]][tetrRand].x;
                     }
                 }
                 if (m1[d] != -1){
-                    if (tmpm1>prof[pos[0]][m1[d]][rand-1].x){
-                        tmpm1 = prof[pos[0]][m1[d]][rand-1].x;
+                    if (tmpm1>tetriminos.[rotacionActual][m1[d]][tetrRand].x){
+                        tmpm1 = tetriminos.[rotacionActual][m1[d]][tetrRand].x;
                     }
                 }
                 if (zero[d] != -1){
-                    if (tmpzero>prof[pos[0]][zero[d]][rand-1].x){
-                        tmpzero = prof[pos[0]][zero[d]][rand-1].x;
+                    if (tmpzero>tetriminos.[rotacionActual][zero[d]][tetrRand].x){
+                        tmpzero = tetriminos.[rotacionActual][zero[d]][tetrRand].x;
                     }
                 }
                 if (one[d] != -1){
-                    if (tmpone>prof[pos[0]][one[d]][rand-1].x){
-                        tmpone = prof[pos[0]][one[d]][rand-1].x;
+                    if (tmpone>tetriminos.[rotacionActual][one[d]][tetrRand].x){
+                        tmpone = tetriminos.[rotacionActual][one[d]][tetrRand].x;
                     }
                 }
                 if (two[d] != -1){
-                    if (tmptwo>prof[pos[0]][two[d]][rand-1].x){
-                        tmptwo = prof[pos[0]][two[d]][rand-1].x;
+                    if (tmptwo>tetriminos.[rotacionActual][two[d]][tetrRand].x){
+                        tmptwo = tetriminos.[rotacionActual][two[d]][tetrRand].x;
                     }
                 }
             }
         }
         int total = 0;
         for (int d = 0;d<4;d++){
-            if (prof[pos[0]][d][rand-1].y == -2){
-                if (perim[2+centralx+deltax+tmpm2][2+centraly-2] != 2){
-                    if(b[centralx+deltax+tmpm2][centraly-2].getBackground() == Color.DARK_GRAY){
+            if (tetriminos.[rotacionActual][d][tetrRand].y == -2){
+                if (perimetro[2+centralx+deltax+tmpm2][2+centraly-2] != 2){
+                    if(b[centralx+deltax+tmpm2][centraly-2].getBackground() == MapaVista.vacio){
                         total++;
                     }
                 }
-            } else if (prof[pos[0]][d][rand-1].y == -1){
-                if (perim[2+centralx+deltax+tmpm1][2+centraly-1] != 2){
-                    if (b[centralx+deltax+tmpm1][centraly-1].getBackground() == Color.DARK_GRAY){
+            } else if (tetriminos.[rotacionActual][d][tetrRand].y == -1){
+                if (perimetro[2+centralx+deltax+tmpm1][2+centraly-1] != 2){
+                    if (b[centralx+deltax+tmpm1][centraly-1].getBackground() == MapaVista.vacio){
                         total++;
                     }
                 }
-            } else if (prof[pos[0]][d][rand-1].y == 0){
-                if (perim[2+centralx+deltax+tmpzero][2+centraly] != 2){
-                    if (b[centralx+deltax+tmpzero][centraly].getBackground() == Color.DARK_GRAY){
+            } else if (tetriminos.[rotacionActual][d][tetrRand].y == 0){
+                if (perimetro[2+centralx+deltax+tmpzero][2+centraly] != 2){
+                    if (b[centralx+deltax+tmpzero][centraly].getBackground() == MapaVista.vacio){
                         total++;
                     }
                 }
-            } else if (prof[pos[0]][d][rand-1].y == 1){
-                if (perim[2+centralx+deltax+tmpone][2+centraly+1] != 2){
-                    if (b[centralx+deltax+tmpone][centraly+1].getBackground() == Color.DARK_GRAY){
+            } else if (tetriminos.[rotacionActual][d][tetrRand].y == 1){
+                if (perimetro[2+centralx+deltax+tmpone][2+centraly+1] != 2){
+                    if (b[centralx+deltax+tmpone][centraly+1].getBackground() == MapaVista.vacio){
                         total++;
                     }
                 }
-            } else if (prof[pos[0]][d][rand-1].y == 2){
-                if (perim[2+centralx+deltax+tmptwo][2+centraly+2] != 2){
-                    if (b[centralx+deltax+tmptwo][centraly+2].getBackground() == Color.DARK_GRAY){
+            } else if (tetriminos.[rotacionActual][d][tetrRand].y == 2){
+                if (perimetro[2+centralx+deltax+tmptwo][2+centraly+2] != 2){
+                    if (b[centralx+deltax+tmptwo][centraly+2].getBackground() == MapaVista.vacio){
                         total++;
                     }
                 }
             }
         } if (total == 4){
-            b[centralx+prof[pos[0]][0][rand-1].x][centraly+prof[pos[0]][0][rand-1].y].setBackground(Color.DARK_GRAY);
-            b[centralx+prof[pos[0]][1][rand-1].x][centraly+prof[pos[0]][1][rand-1].y].setBackground(Color.DARK_GRAY);
-            b[centralx+prof[pos[0]][2][rand-1].x][centraly+prof[pos[0]][2][rand-1].y].setBackground(Color.DARK_GRAY);
-            b[centralx+prof[pos[0]][3][rand-1].x][centraly+prof[pos[0]][3][rand-1].y].setBackground(Color.DARK_GRAY);
+            b[centralx+tetriminos.[rotacionActual][0][tetrRand].x][centraly+tetriminos.[rotacionActual][0][tetrRand].y].setBackground(MapaVista.vacio);
+            b[centralx+tetriminos.[rotacionActual][1][tetrRand].x][centraly+tetriminos.[rotacionActual][1][tetrRand].y].setBackground(MapaVista.vacio);
+            b[centralx+tetriminos.[rotacionActual][2][tetrRand].x][centraly+tetriminos.[rotacionActual][2][tetrRand].y].setBackground(MapaVista.vacio);
+            b[centralx+tetriminos.[rotacionActual][3][tetrRand].x][centraly+tetriminos.[rotacionActual][3][tetrRand].y].setBackground(MapaVista.vacio);
             centralx = centralx+deltax;
-            b[centralx+prof[pos[0]][0][rand-1].x][centraly+prof[pos[0]][0][rand-1].y].setBackground(rnd[rand-1]);
-            b[centralx+prof[pos[0]][1][rand-1].x][centraly+prof[pos[0]][1][rand-1].y].setBackground(rnd[rand-1]);
-            b[centralx+prof[pos[0]][2][rand-1].x][centraly+prof[pos[0]][2][rand-1].y].setBackground(rnd[rand-1]);
-            b[centralx+prof[pos[0]][3][rand-1].x][centraly+prof[pos[0]][3][rand-1].y].setBackground(rnd[rand-1]);
+            b[centralx+tetriminos.[rotacionActual][0][tetrRand].x][centraly+tetriminos.[rotacionActual][0][tetrRand].y].setBackground(rnd[tetrRand]);
+            b[centralx+tetriminos.[rotacionActual][1][tetrRand].x][centraly+tetriminos.[rotacionActual][1][tetrRand].y].setBackground(rnd[tetrRand]);
+            b[centralx+tetriminos.[rotacionActual][2][tetrRand].x][centraly+tetriminos.[rotacionActual][2][tetrRand].y].setBackground(rnd[tetrRand]);
+            b[centralx+tetriminos.[rotacionActual][3][tetrRand].x][centraly+tetriminos.[rotacionActual][3][tetrRand].y].setBackground(rnd[tetrRand]);
         }
     }
  
